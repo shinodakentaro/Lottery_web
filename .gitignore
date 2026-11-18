@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Claude Code のローカル設定
+.claude/settings.local.json
+
+# リポジトリ管理対象外の素材
+スクリーンショット*.png
+Lottery.lottie

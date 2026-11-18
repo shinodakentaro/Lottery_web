@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>設定 - 何でもくじ</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div style="margin: 20px;">
+		<a href="index.html" class="bt-kuji" style="display: inline-block; padding: 10px 20px; margin-bottom: 20px; text-decoration: none; color: #333;">← くじ引きに戻る</a>
+		
+		<h2>設定</h2>
+		<div id="settings">
+			<div class="setting-item">
+			  文字の大きさ<input type="number" min="4" max="100" value="18" id="setting-font">px
+			</div>
+		</div>
+		<div id="kuji-area">
+			<div class="kuji-unit">
+			  <div class="kuji-item">
+				名前：<textarea class="kuji-name" placeholder="くじの名前">1等
+温泉旅行ペアチケット</textarea>
+			  </div>
+			  <div class="kuji-item">
+				残数：<input type="number" class="kuji-num" min="0" placeholder="0" value="1">
+			  </div>
+			  <div class="kuji-item">
+				<input type="checkbox" class="kuji-keep">残数を減らさない
+			  </div>
+			  <div class="kuji-item kuji-image-item">
+				画像：<input type="file" accept="image/*" class="kuji-image-input">
+				<button type="button" class="kuji-image-clear-bt bt-kuji s-hide">画像を消去</button>
+				<img class="kuji-image-preview s-hide" alt="プレビュー">
+			  </div>
+			  <div class="kuji-item">
+				<button class="kuji-bt-del bt-kuji">この項目を消去</button>
+			  </div>
+			</div>
+			<div class="kuji-unit">
+			  <div class="kuji-item">
+				名前：<textarea class="kuji-name" placeholder="くじの名前">2等
+人気家庭用ゲーム機</textarea>
+			  </div>
+			  <div class="kuji-item">
+				残数：<input type="number" class="kuji-num" min="0" placeholder="0" value="2">
+			  </div>
+			  <div class="kuji-item">
+				<input type="checkbox" class="kuji-keep">残数を減らさない
+			  </div>
+			  <div class="kuji-item kuji-image-item">
+				画像：<input type="file" accept="image/*" class="kuji-image-input">
+				<button type="button" class="kuji-image-clear-bt bt-kuji s-hide">画像を消去</button>
+				<img class="kuji-image-preview s-hide" alt="プレビュー">
+			  </div>
+			  <div class="kuji-item">
+				<button class="kuji-bt-del bt-kuji">この項目を消去</button>
+			  </div>
+			</div>
+			<div class="kuji-unit">
+			  <div class="kuji-item">
+				名前：<textarea class="kuji-name" placeholder="くじの名前">3等
+有名メーカー掃除機</textarea>
+			  </div>
+			  <div class="kuji-item">
+				残数：<input type="number" class="kuji-num" min="0" placeholder="0" value="3">
+			  </div>
+			  <div class="kuji-item">
+				<input type="checkbox" class="kuji-keep">残数を減らさない
+			  </div>
+			  <div class="kuji-item kuji-image-item">
+				画像：<input type="file" accept="image/*" class="kuji-image-input">
+				<button type="button" class="kuji-image-clear-bt bt-kuji s-hide">画像を消去</button>
+				<img class="kuji-image-preview s-hide" alt="プレビュー">
+			  </div>
+			  <div class="kuji-item">
+				<button class="kuji-bt-del bt-kuji">この項目を消去</button>
+			  </div>
+			</div>
+			<div class="kuji-unit">
+			  <div class="kuji-item">
+				名前：<textarea class="kuji-name" placeholder="くじの名前">4等
+商品券</textarea>
+			  </div>
+			  <div class="kuji-item">
+				残数：<input type="number" class="kuji-num" min="0" placeholder="0" value="4">
+			  </div>
+			  <div class="kuji-item">
+				<input type="checkbox" class="kuji-keep">残数を減らさない
+			  </div>
+			  <div class="kuji-item kuji-image-item">
+				画像：<input type="file" accept="image/*" class="kuji-image-input">
+				<button type="button" class="kuji-image-clear-bt bt-kuji s-hide">画像を消去</button>
+				<img class="kuji-image-preview s-hide" alt="プレビュー">
+			  </div>
+			  <div class="kuji-item">
+				<button class="kuji-bt-del bt-kuji">この項目を消去</button>
+			  </div>
+			</div>
+			<div class="kuji-unit">
+			  <div class="kuji-item">
+				名前：<textarea class="kuji-name" placeholder="くじの名前">参加賞
+ポケットティッシュ</textarea>
+			  </div>
+			  <div class="kuji-item">
+				残数：<input type="number" class="kuji-num" min="0" placeholder="0" value="5">
+			  </div>
+			  <div class="kuji-item">
+				<input type="checkbox" class="kuji-keep">残数を減らさない
+			  </div>
+			  <div class="kuji-item kuji-image-item">
+				画像：<input type="file" accept="image/*" class="kuji-image-input">
+				<button type="button" class="kuji-image-clear-bt bt-kuji s-hide">画像を消去</button>
+				<img class="kuji-image-preview s-hide" alt="プレビュー">
+			  </div>
+			  <div class="kuji-item">
+				<button class="kuji-bt-del bt-kuji">この項目を消去</button>
+			  </div>
+			</div>
+		</div>
+		<button id="bt-add-kuji" class="bt-kuji">くじを追加</button>
+		<div id="area-save" class="s-hide">
+			<button id="bt-save" class="bt-kuji">くじを保存</button>
+			<button id="bt-load" class="bt-kuji">保存したくじを呼び出す</button>
+		</div>
+		
+		<div id="msg-box">
+			<div id="message" class="off">データを保存しました。</div>
+		</div>
+	</div>
+	<script src="settings.js"></script>
+	</body>
+	</html>
