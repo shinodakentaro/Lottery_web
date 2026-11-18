@@ -40,6 +40,10 @@ html{
     height: 100%;
   }
   #result-popup{
+    /* ポップアップの拡大倍率。文字・余白・×ボタン・画像すべてに掛かる */
+    --popup-scale: 3;
+    /* 基準の文字サイズ（設定ページの「文字の大きさ」でscript.jsから上書き） */
+    --popup-fs: 18px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -47,17 +51,18 @@ html{
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(12px, 3vw, 20px);
+    gap: min(calc(16px * var(--popup-scale)), 4vh);
     width: max-content;
-    max-width: min(92vw, 420px);
-    max-height: 85vh;
+    max-width: min(92vw, calc(420px * var(--popup-scale)));
+    max-height: 90vh;
     overflow-y: auto;
-    padding: clamp(20px, 5vw, 32px) clamp(20px, 6vw, 32px);
-    border: 2px solid #333;
-    border-radius: 16px;
+    padding: min(calc(32px * var(--popup-scale)), 6vw, 6vh);
+    border: 3px solid #333;
+    border-radius: 24px;
     background-color: #fff;
-    box-shadow: 0 6px 20px rgba(0,0,0,.2);
-    font-size: clamp(16px, 3.5vw, 20px);
+    box-shadow: 0 10px 40px rgba(0,0,0,.25);
+    /* 小さい画面では画面幅に合わせて縮める */
+    font-size: min(calc(var(--popup-fs) * var(--popup-scale)), 9vw);
     line-height: 1.4;
     text-align: center;
     opacity: 0;
@@ -72,10 +77,10 @@ html{
   }
   #bt-popup-close{
     position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 32px;
-    height: 32px;
+    top: 12px;
+    right: 12px;
+    width: clamp(40px, 7vw, 64px);
+    height: clamp(40px, 7vw, 64px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -84,7 +89,7 @@ html{
     border-radius: 50%;
     background-color: transparent;
     color: #333;
-    font-size: 22px;
+    font-size: clamp(30px, 5.5vw, 52px);
     line-height: 1;
     cursor: pointer;
   }
@@ -94,10 +99,10 @@ html{
   #result-image{
     display: block;
     width: 100%;
-    max-width: 320px;
-    max-height: 320px;
+    max-width: calc(320px * var(--popup-scale));
+    max-height: min(calc(320px * var(--popup-scale)), 55vh);
     object-fit: contain;
-    border-radius: 8px;
+    border-radius: 12px;
   }
   #result-image.s-hide{
     display: none;
@@ -140,6 +145,15 @@ html{
     display: inline-block;
     padding: 10px 20px;
     text-decoration: none;
+    color: #333;
+  }
+  /* 画面下の「全画面表示」(button)と「設定ページへ」(a)の見た目を揃える */
+  #utility-buttons .bt-kuji{
+    display: inline-block;
+    padding: 10px 20px;
+    font: inherit;
+    font-size: 16px;
+    line-height: 1.2;
     color: #333;
   }
   /* settings */

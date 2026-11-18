@@ -44,11 +44,8 @@ window.addEventListener('storage', (e) => {
 function loadFontSize(){
   const savedFontSize = localStorage.getItem('nandemo-kuji-fs');
   const fs = savedFontSize ? Number(savedFontSize) : 18;
-  if(isNaN(fs) || fs <= 0){
-    result_popup.style.fontSize = '18px';
-  }else{
-    result_popup.style.fontSize = fs + 'px';
-  }
+  // 実際の表示サイズはCSS側で --popup-scale 倍される
+  result_popup.style.setProperty('--popup-fs', (isNaN(fs) || fs <= 0 ? 18 : fs) + 'px');
 }
 
 // localStorageのくじデータを読み込む。未設定ならnull、壊れていたら例外
