@@ -22,6 +22,18 @@ html{
     display: flex;
     justify-content: center;
   }
+  /* 全画面表示時：背景を指定しないとブラウザ既定の黒背景(::backdrop)が透けて真っ黒になる */
+  /* ※セレクタを1つにまとめると非対応ブラウザでルールごと無視されるので分けて書く */
+  #screen:fullscreen{
+    align-items: center;
+    background-color: #fff;
+    overflow-y: auto;
+  }
+  #screen:-webkit-full-screen{
+    align-items: center;
+    background-color: #fff;
+    overflow-y: auto;
+  }
   #screen-inner{
     display: flex;
     flex-direction: column;
@@ -38,6 +50,15 @@ html{
     display: block;
     width: 100%;
     height: 100%;
+  }
+  /* 紙吹雪（ポップアップの後ろ、画面全体に重ねる） */
+  #confetti{
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1050;
+    pointer-events: none;
   }
   #result-popup{
     /* ポップアップの拡大倍率。文字・余白・×ボタン・画像すべてに掛かる */

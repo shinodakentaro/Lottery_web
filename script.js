@@ -11,6 +11,8 @@ const bt_pre = document.getElementById('bt-pre');
 const bt_popup_close = document.getElementById('bt-popup-close');
 const bt_fullscreen = document.getElementById('bt-fullscreen');
 const msg = document.getElementById('message');
+const confetti_canvas = document.getElementById('confetti');
+let confetti_raf = null;
 let playing = false;
 
 //リスナ
@@ -150,6 +152,7 @@ function getKuji(){
   //演出（イラストを1回再生してから結果をポップアップ表示）
   playIllustOnce().then(()=>{
     showPopup(newline(String(data[hit_id][0] ?? '')), data[hit_id][3]);
+    launchConfetti();
     // 残数を減らす処理
     if(!data[hit_id][2]){ // kuji_keepがfalseの場合
       data[hit_id][1] = Number(data[hit_id][1]) - 1;
@@ -166,10 +169,104 @@ function getKuji(){
 
 function prepareKuji(){
   playing = false;
+  stopConfetti();
   hidePopup();
   resetIllust();
   bt_get.classList.remove('invisible');
   bt_pre.classList.add('invisible');
+}
+
+// 紙吹雪：半分は画面の左右下から打ち上げ、半分は画面上から降らせる
+const CONFETTI_COLORS = ['#ff4d6d','#ffd23f','#33cccc','#5e60ce','#ff8c42','#3bceac','#f72585'];
+const CONFETTI_MAX_MS = 6000;
+function launchConfetti(){
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  stopConfetti();
+  const ctx = confetti_canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  confetti_canvas.width = Math.round(W * dpr);
+  confetti_canvas.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const s = Math.max(0.6, H / 800); // 画面の高さに合わせて勢いを調整
+  const rand = (a,b)=>a + Math.random()*(b-a);
+  const count = Math.round(Math.min(260, 100 + W / 6));
+  const parts = [];
+  for(let i=0;i<count;i++){
+    const p = i % 2 === 0
+      ? (()=>{ // 左右下から打ち上げ
+          const fromLeft = i % 4 === 0;
+          return {
+            x: fromLeft ? rand(-10, W*0.05) : rand(W*0.95, W+10),
+            y: H + rand(0, 20),
+            vx: (fromLeft ? 1 : -1) * rand(2, 10) * s,
+            vy: -rand(16, 28) * s,
+          };
+        })()
+      : { // 画面上から降らせる（時間差が出るよう高さをばらす）
+          x: rand(0, W),
+          y: -rand(10, H * 0.6),
+          vx: rand(-1, 1),
+          vy: rand(1, 3) * s,
+        };
+    parts.push({
+      ...p,
+      w: rand(7, 13),
+      h: rand(4, 8),
+      rot: rand(0, Math.PI*2),
+      vrot: rand(-0.25, 0.25),
+      flip: rand(0, Math.PI*2),
+      vflip: rand(0.08, 0.2),
+      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    });
+  }
+  const start = performance.now();
+  let last = start;
+  const frame = (now)=>{
+    // 端末の描画速度に依存しないよう補正（初回フレームは時刻が前後することがあるので0未満にしない）
+    const k = Math.max(0, Math.min(3, (now - last) / 16.67));
+    last = now;
+    const elapsed = now - start;
+    ctx.clearRect(0, 0, W, H);
+    // 最後の1秒でフェードアウト
+    ctx.globalAlpha = Math.max(0, Math.min(1, (CONFETTI_MAX_MS - elapsed) / 1000));
+    let alive = 0;
+    parts.forEach((p)=>{
+      p.vy += 0.4 * s * k;
+      p.vx *= Math.pow(0.985, k);
+      p.vy = Math.min(p.vy * Math.pow(0.985, k), 4 * s); // 落下は空気抵抗でゆっくり
+      p.x += (p.vx + Math.sin(p.flip) * 0.8) * k;
+      p.y += p.vy * k;
+      p.rot += p.vrot * k;
+      p.flip += p.vflip * k;
+      if(p.y > H + 20 && p.vy > 0) return; // 落ちきったものは描かない
+      alive++;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.scale(1, Math.cos(p.flip)); // 裏返るようなひらひら感
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    if(alive > 0 && elapsed < CONFETTI_MAX_MS){
+      confetti_raf = requestAnimationFrame(frame);
+    }else{
+      stopConfetti();
+    }
+  };
+  confetti_raf = requestAnimationFrame(frame);
+}
+
+function stopConfetti(){
+  if(confetti_raf !== null){
+    cancelAnimationFrame(confetti_raf);
+    confetti_raf = null;
+  }
+  const ctx = confetti_canvas.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, confetti_canvas.width, confetti_canvas.height);
 }
 
 function msgBox(str){
